@@ -1,0 +1,6 @@
+projectKey=carbon_sense
+serverUrl=http://localhost:9000
+serverVersion=25.6.0.109173
+dashboardUrl=http://localhost:9000/dashboard?id=carbon_sense
+ceTaskId=8420d13f-9fb7-49ec-bce9-ea43e6c082e3
+ceTaskUrl=http://localhost:9000/api/ce/task?id=8420d13f-9fb7-49ec-bce9-ea43e6c082e3
