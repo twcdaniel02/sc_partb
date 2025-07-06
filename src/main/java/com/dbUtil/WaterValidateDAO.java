@@ -1,31 +1,13 @@
 package com.dbUtil;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class WaterValidateDAO {
 
-    public static Connection openConnection() {
-        Connection connection = null;
-
-        String dbURL = "jdbc:mysql://localhost:3306/carbonsense";
-        String username = "root";
-        String password = "";
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(dbURL, username, password);
-
-        } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        return connection;
-    }
-
     public void approveWater(int waterID) {
-        try (Connection conn = openConnection();
+        try (Connection conn = DBConnect.openConnection();
              PreparedStatement stmt = conn.prepareStatement("UPDATE waterconsumption SET status = 'APPROVED' WHERE waterID = ?;")) {
 
             stmt.setInt(1, waterID);
@@ -42,7 +24,7 @@ public class WaterValidateDAO {
     }
 
     public void disapproveWater(int waterID) {
-        try (Connection conn = openConnection();
+        try (Connection conn = DBConnect.openConnection();
              PreparedStatement stmt = conn.prepareStatement("UPDATE waterconsumption SET status = 'DISAPPROVED' WHERE waterID = ?;")) {
 
             stmt.setInt(1, waterID);
@@ -59,7 +41,7 @@ public class WaterValidateDAO {
     }
 
     public void deleteWater(int waterID) {
-        try (Connection conn = openConnection()) {
+        try (Connection conn = DBConnect.openConnection()) {
 
             // Update application table to remove reference to water consumption
             String updateSql = "UPDATE application SET waterID = NULL WHERE waterID = ?;";

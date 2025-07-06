@@ -1,7 +1,6 @@
 package com.dbUtil;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,28 +10,9 @@ import com.model.ElectricityValidation;
 
 public class ElectricConDAO {
 
-	public static Connection openConnection() {
-		Connection connection = null;
-
-		String dbURL = "jdbc:mysql://localhost:3306/carbonsense";
-		String username = "root";
-		String password = "";
-
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection(dbURL, username, password);
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		} catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
-		}
-		return connection;
-	}
-
 	public ElectricityValidation getElectricConDetails(int electricityID) {
 		ElectricityValidation electricityCon = new ElectricityValidation();
-		try (Connection conn = openConnection()) {
+		try (Connection conn = DBConnect.openConnection()) {
 			String sql = "SELECT * FROM electricityconsumption WHERE electricityID = ?";
 			try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 				stmt.setFloat(1, electricityID);
@@ -59,7 +39,7 @@ public class ElectricConDAO {
 
 	public void updateElectricCon(float proportionalFactor, float electricityUsageRM, float electricityUsageM3,
 			byte[] fileBytes, int electricityID) {
-		try (Connection conn = openConnection()) {
+		try (Connection conn = DBConnect.openConnection()) {
 
 			String updateElectricitySql = "UPDATE electricityconsumption SET electricityProportionalFactor = ?, electricUsageValueRM = ?, electricUsageValueM3 = ?, electricConsumptionProof = ?, status = 'PENDING' WHERE electricityID = ?";
 			try (PreparedStatement electricityStmt = conn.prepareStatement(updateElectricitySql)) {
@@ -78,7 +58,7 @@ public class ElectricConDAO {
 	}
 	
 	public void updateElectricConNoProof(float proportionalFactor, float electricityUsageRM, float electricityUsageM3, int electricityID) {
-		try (Connection conn = openConnection()) {
+		try (Connection conn = DBConnect.openConnection()) {
 
 			String updateElectricitySql = "UPDATE electricityconsumption SET electricityProportionalFactor = ?, electricUsageValueRM = ?, electricUsageValueM3 = ?, status = 'PENDING' WHERE electricityID = ?";
 			try (PreparedStatement electricityStmt = conn.prepareStatement(updateElectricitySql)) {
@@ -99,7 +79,7 @@ public class ElectricConDAO {
 			float electricityUsageM3, byte[] fileBytes, int applicationID) throws SQLException {
 		String insertElectricitySql = "INSERT INTO electricityconsumption (electricityProportionalFactor, electricUsageValueRM, electricUsageValueM3, electricConsumptionProof, status) VALUES (?, ?, ?, ?, 'PENDING');";
 
-		try (Connection conn = openConnection()) {
+		try (Connection conn = DBConnect.openConnection()) {
 			try (PreparedStatement electricityStmt = conn.prepareStatement(insertElectricitySql,
 					PreparedStatement.RETURN_GENERATED_KEYS)) {
 				electricityStmt.setFloat(1, proportionalFactor);
@@ -137,7 +117,7 @@ public class ElectricConDAO {
 			float electricityUsageM3, byte[] fileBytes, int userID, LocalDate currentDate) throws SQLException {
 		String insertElectricitySql = "INSERT INTO electricityconsumption (electricityProportionalFactor, electricUsageValueRM, electricUsageValueM3, electricConsumptionProof, status) VALUES (?, ?, ?, ?, 'PENDING');";
 
-		try (Connection conn = openConnection()) {
+		try (Connection conn = DBConnect.openConnection()) {
 			try (PreparedStatement electricityStmt = conn.prepareStatement(insertElectricitySql,
 					PreparedStatement.RETURN_GENERATED_KEYS)) {
 				electricityStmt.setFloat(1, proportionalFactor);

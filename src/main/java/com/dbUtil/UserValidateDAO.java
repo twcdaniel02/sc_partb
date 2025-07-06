@@ -1,32 +1,13 @@
 package com.dbUtil;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class UserValidateDAO {
-	public static Connection openConnection() {
-		Connection connection = null;
-
-		String dbURL = "jdbc:mysql://localhost:3306/carbonsense";
-		String username = "root";
-		String password = "";
-
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection(dbURL, username, password);
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-		} catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
-		}
-		return connection;
-	}
 	
 	public void approveUser(int userID) {
-	    try (Connection conn = openConnection();
+	    try (Connection conn = DBConnect.openConnection();
 	         PreparedStatement stmt = conn.prepareStatement("UPDATE users SET status = 'APPROVED' WHERE userID = ?;")) {
 
 	        stmt.setInt(1, userID);
@@ -43,7 +24,7 @@ public class UserValidateDAO {
 	}
 	
 	public void disapproveUser(int userID) {
-	    try (Connection conn = openConnection();
+	    try (Connection conn = DBConnect.openConnection();
 	         PreparedStatement stmt = conn.prepareStatement("UPDATE users SET status = 'DISAPPROVED' WHERE userID = ?;")) {
 
 	        stmt.setInt(1, userID);
@@ -60,7 +41,7 @@ public class UserValidateDAO {
 	}
 	
 	public void deleteUser(int userID) {
-	    try (Connection conn = openConnection()) {
+	    try (Connection conn = DBConnect.openConnection()) {
 
 	        // Delete electricity consumption entry
 	        String deleteSql = "DELETE FROM users WHERE userID = ?;";

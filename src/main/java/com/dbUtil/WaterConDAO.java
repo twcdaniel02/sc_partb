@@ -1,7 +1,6 @@
 package com.dbUtil;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,26 +10,9 @@ import com.model.WaterValidation;
 
 public class WaterConDAO {
 
-    public static Connection openConnection() {
-        Connection connection = null;
-
-        String dbURL = "jdbc:mysql://localhost:3306/carbonsense";
-        String username = "root";
-        String password = "";
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(dbURL, username, password);
-
-        } catch (SQLException | ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        return connection;
-    }
-
     public WaterValidation getWaterConDetails(int waterID) {
         WaterValidation waterCon = new WaterValidation();
-        try (Connection conn = openConnection()) {
+        try (Connection conn = DBConnect.openConnection()) {
             String sql = "SELECT * FROM waterconsumption WHERE waterID = ?";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, waterID);
@@ -57,7 +39,7 @@ public class WaterConDAO {
 
     public void updateWaterCon(float proportionalFactor, float waterUsageRM, float waterUsageM3, byte[] fileBytes,
             int waterID) {
-        try (Connection conn = openConnection()) {
+        try (Connection conn = DBConnect.openConnection()) {
 
             String updateWaterSql = "UPDATE waterconsumption SET waterProportionalFactor = ?, waterUsageValueRM = ?, waterUsageValueM3 = ?, waterConsumptionProof = ?, status = 'PENDING' WHERE waterID = ?";
             try (PreparedStatement waterStmt = conn.prepareStatement(updateWaterSql)) {
@@ -76,7 +58,7 @@ public class WaterConDAO {
     }
 
     public void updateWaterConNoProof(float proportionalFactor, float waterUsageRM, float waterUsageM3, int waterID) {
-        try (Connection conn = openConnection()) {
+        try (Connection conn = DBConnect.openConnection()) {
 
             String updateWaterSql = "UPDATE waterconsumption SET waterProportionalFactor = ?, waterUsageValueRM = ?, waterUsageValueM3 = ?, status = 'PENDING' WHERE waterID = ?";
             try (PreparedStatement waterStmt = conn.prepareStatement(updateWaterSql)) {
@@ -97,7 +79,7 @@ public class WaterConDAO {
             byte[] fileBytes, int applicationID) throws SQLException {
         String insertWaterSql = "INSERT INTO waterconsumption (waterProportionalFactor, waterUsageValueRM, waterUsageValueM3, waterConsumptionProof, status) VALUES (?, ?, ?, ?, 'PENDING');";
 
-        try (Connection conn = openConnection()) {
+        try (Connection conn = DBConnect.openConnection()) {
             try (PreparedStatement waterStmt = conn.prepareStatement(insertWaterSql,
                     PreparedStatement.RETURN_GENERATED_KEYS)) {
                 waterStmt.setFloat(1, proportionalFactor);
@@ -135,7 +117,7 @@ public class WaterConDAO {
             byte[] fileBytes, int userID, LocalDate currentDate) throws SQLException {
         String insertWaterSql = "INSERT INTO waterconsumption (waterProportionalFactor, waterUsageValueRM, waterUsageValueM3, waterConsumptionProof, status) VALUES (?, ?, ?, ?, 'PENDING');";
 
-        try (Connection conn = openConnection()) {
+        try (Connection conn = DBConnect.openConnection()) {
             try (PreparedStatement waterStmt = conn.prepareStatement(insertWaterSql,
                     PreparedStatement.RETURN_GENERATED_KEYS)) {
                 waterStmt.setFloat(1, proportionalFactor);
