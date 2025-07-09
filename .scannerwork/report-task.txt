@@ -1,6 +1,6 @@
-projectKey=carbon_sense
+projectKey=SC-Part-B
 serverUrl=http://localhost:9000
 serverVersion=25.6.0.109173
-dashboardUrl=http://localhost:9000/dashboard?id=carbon_sense
-ceTaskId=8420d13f-9fb7-49ec-bce9-ea43e6c082e3
-ceTaskUrl=http://localhost:9000/api/ce/task?id=8420d13f-9fb7-49ec-bce9-ea43e6c082e3
+dashboardUrl=http://localhost:9000/dashboard?id=SC-Part-B
+ceTaskId=30239b73-db5f-48c4-a6b8-65c86289afb7
+ceTaskUrl=http://localhost:9000/api/ce/task?id=30239b73-db5f-48c4-a6b8-65c86289afb7
